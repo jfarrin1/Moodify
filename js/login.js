@@ -98,13 +98,13 @@
                             artist += ', ';
                         }
                         artist += response.items[i].artists[response.items[i].artists.length - 1].name;
-                        //innerHTML += '<tr><th scope="row">' + i + '</th><td>' + song + '</td><td>' + album + '</td><td>' + artist + '</td><td><div class="btn-group"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton' + i + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select Mood</button><ul class="dropdown-menu"><li><a href="#" onclick="toggleDrop.call(this)";>Happy</a></li><li><a href="#" onclick="toggleDrop.call(this)";>Sad</a></li><li><a href="#" onclick="toggleDrop.call(this)";>Nostalgic</a></li></ul></div></td></tr>';
                         innerHTML += '<tr><th scope="row">' + i + '</th><td>' + song + '</td><td>' + album + '</td><td>' + artist + '</td><td><button class="btn btn-secondary" type="button" onclick="openMoodModal(\'' + song + '\',\'' + artist + '\',\'' + uri + '\')">Select Mood</button></td></tr>';
                     }
                     innerHTML += '</tbody></table><a class="btn btn-xl btn-primary" style="float:right; margin-bottom: 20px">Submit</a>';
                     $('#trackTable').html(innerHTML);
 
                 });
+	    //add Modal sliders for each mood
             populateModal();
         });
     });
