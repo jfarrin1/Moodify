@@ -155,7 +155,6 @@ function openMoodModal(index, song, artist, uri) {
 		//set sliders to proper position for this song
         key = sliders[i].id.substring(9);
         sliders[i].value = songData[index].moods[key];
-		console.log(songData[index].moods[key]);
     }
     $("#moodModal").modal('toggle');
     saveSongIndex = index;
@@ -163,8 +162,6 @@ function openMoodModal(index, song, artist, uri) {
 
 //used to move the output display bubble above the slider
 function moveOutput(slider){
-	console.log('move Output');
-
   var control = $(slider),
     controlMin = control.attr('min'),
     controlMax = control.attr('max'),
