@@ -76,7 +76,7 @@ var saveSongIndex = 0;
 		
         $("#modalMoods").html(tempHTML);
     }
-    
+	
     var loginButton = document.getElementById('btn-login');
     var headRow = document.getElementById('headerRow');
 
@@ -86,13 +86,13 @@ var saveSongIndex = 0;
             getUserData(accessToken)
                 .then(function(response) {
                     loginButton.style.display = 'none';
-                    console.log(response);
+                    //console.log(response);
                     userID = response.id;
                 });
             getUserTopTracks(accessToken)
                 .then(function (response) {
                     headRow.style.display = 'none';
-                    console.log(response);
+                    //console.log(response);
                     var innerHTML = '<h2 style="margin-top:50px;">Your Top 10 Songs</h2><table class="table table-hover"><thead><tr><th scope="col">#</th><th scope="col">Song</th><th scope="col">Album</th><th scope="col">Artist</th><th scope="col">Mood</th></tr></thead><tbody>';
                     for (i = 0; i < response.items.length; i++) {
                         album = response.items[i].album.name;
@@ -107,7 +107,7 @@ var saveSongIndex = 0;
                         artist += response.items[i].artists[response.items[i].artists.length - 1].name;
                         innerHTML += '<tr><th scope="row">' + i + '</th><td>' + song + '</td><td>' + album + '</td><td>' + artist + '</td><td><button class="btn btn-secondary" type="button" onclick="openMoodModal(\'' + i + '\',\'' + song + '\',\'' + artist + '\',\'' + uri + '\')">Select Mood</button></td></tr>';
                     }
-                    innerHTML += '</tbody></table><a class="btn btn-xl btn-primary" style="float:right; margin-bottom: 20px">Submit</a>';
+                    innerHTML += '</tbody></table><a class="btn btn-xl btn-primary" style="float:right; margin-bottom: 20px" onclick="updateSongData();">Submit</a>';
                     $('#trackTable').html(innerHTML);
 
                 });
@@ -159,6 +159,10 @@ function openMoodModal(index, song, artist, uri) {
     $("#moodModal").modal('toggle');
     saveSongIndex = index;
 }
+
+function updateSongData(){
+	$("#thanksModal").modal('toggle');
+};
 
 //used to move the output display bubble above the slider
 function moveOutput(slider){
