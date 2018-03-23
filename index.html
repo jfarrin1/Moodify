@@ -80,10 +80,22 @@
           <div class="col-lg-8 mx-auto text-center">
             <h2 class="section-heading text-white">How it Works</h2>
             <hr class="light my-4">
+			
+			<form>
+
+			  <div class="range-control">
+				<input id="inputRange" type="range" min="0" max="10" step="1" value="0" data-thumbwidth="20">
+				<output name="rangeVal">0</output>
+			  </div>
+
+			</form>
+
+			
+			
             <div class="step">1.</div><h4 class="stepHeader">Log into Spotify</h4>
-                <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">We use Spotify's secure API to connect your account with Moodify. Moodify requests permission to access only your public playlists. Read about our privacy policy below.</p>
+                <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">We use Spotify's secure API to connect your account with Moodify. Moodify requests permission to access only your "Top" songs. Read about our privacy policy below.</p>
             <div class="step">2.</div><h4 class="stepHeader">View Your Top 10 Songs</h4>
-              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">Spotify creates a list of your 'top' songs, which we display to you. Moodify does not create this list itself, we just use Spotify's.</p>
+              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">Spotify creates a list of your "Top" songs, which we display to you. Moodify does not create this list itself, we just use Spotify's.</p>
             <div class="step">3.</div><h4 class="stepHeader">Select Moods</h4>
               <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">For each song, use the sliders to adjust the different mood levels. Once you've done this for all songs, click Submit.</p>
             <div class="step">4.</div><h4 class="stepHeader">Get Recommended Songs (Comming Soon)</h4>
@@ -145,7 +157,6 @@
                 <div class="modal-body">
                     <iframe id ="modalPlayer"src="" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                     <div id="modalMoods">
-
                     </div>
                 </div>
                 <div class="modal-footer">

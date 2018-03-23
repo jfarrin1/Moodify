@@ -1,6 +1,6 @@
+//~Global Variables
 //array to hold song mood data
 var songData = {};
-//~Global Variables
 var Moods = ['HAPPY', 'SAD', 'NOSTALGIC', 'RELAXED', 'ANGRY'];
 var saveSongIndex = 0;
 
@@ -69,9 +69,11 @@ var saveSongIndex = 0;
     //add a slider in the modal for each mood
     function populateModal() {
         var tempHTML = '';
-        for (var i = 0; i < Moods.length; i++) {
-            tempHTML += '<h5>' + Moods[i] + '</h5><input type="range" min="1" max="100" value="50" class="slider" id="modalMood' + Moods[i]+ '">'
-        };
+		 for (var i = 0; i < Moods.length; i++) {
+            tempHTML += '<h5>' + Moods[i] + '</h5><form><div class="range-control"><input type="range" min="0" max="10" value="0" step="1" data-thumbwidth="20" oninput="moveOutput(this)" class="slider" id="modalMood' + Moods[i]+ '"><output name="rangeVal">0</output></div></form>'
+		 };
+		 
+		
         $("#modalMoods").html(tempHTML);
     }
     
@@ -84,13 +86,13 @@ var saveSongIndex = 0;
             getUserData(accessToken)
                 .then(function(response) {
                     loginButton.style.display = 'none';
-                    //console.log(response);
+                    console.log(response);
                     userID = response.id;
                 });
             getUserTopTracks(accessToken)
                 .then(function (response) {
                     headRow.style.display = 'none';
-                    //console.log(response);
+                    console.log(response);
                     var innerHTML = '<h2 style="margin-top:50px;">Your Top 10 Songs</h2><table class="table table-hover"><thead><tr><th scope="col">#</th><th scope="col">Song</th><th scope="col">Album</th><th scope="col">Artist</th><th scope="col">Mood</th></tr></thead><tbody>';
                     for (i = 0; i < response.items.length; i++) {
                         album = response.items[i].album.name;
@@ -123,20 +125,23 @@ function createSongObject(song, album, artist) {
         'moods': {}
     }
     for (var i = 0; i < Moods.length; i++) {
-        tempObject.moods[Moods[i]] = 50;
+        tempObject.moods[Moods[i]] = 0;
     }
     return tempObject;
 }
 
 function saveSongMoods() {
-    //loop over moods in model and add to dictionary
-    for (var i = 1; i < $("#modalMoods").children().length; i += 2) {
-        key = $("#modalMoods").children()[i].id.substring(9);
-        songData[saveSongIndex].moods[key] = $("#modalMoods").children()[i].value;
+    //loop over moods in model and update their songData values
+	var sliders = $(".slider");
+    for (var i = 0; i < sliders.length; i += 1) {
+        key = sliders[i].id.substring(9);
+        songData[saveSongIndex].moods[key] = sliders[i].value;
+		
     }
 }
 
 function openMoodModal(index, song, artist, uri) {
+	//since we use the same modal for all songs, we have to change out the data for each song
     $("#modalSong").text(song);
     $("#modalArtist").text('by ' + artist);
     $("#modalPlayer").attr('src', 'https://open.spotify.com/embed?uri=' + uri);
@@ -145,10 +150,34 @@ function openMoodModal(index, song, artist, uri) {
         var songObject = createSongObject(song, album, artist);
         songData[index] = songObject;
     }
-    for (var i = 1; i < $("#modalMoods").children().length; i += 2) {
-        key = $("#modalMoods").children()[i].id.substring(9);
-        $("#modalMoods").children()[i].value = songData[index].moods[key];
+	var sliders = $(".slider");
+    for (var i = 0; i < sliders.length; i += 1) {
+		//set sliders to proper position for this song
+        key = sliders[i].id.substring(9);
+        sliders[i].value = songData[index].moods[key];
+		console.log(songData[index].moods[key]);
     }
     $("#moodModal").modal('toggle');
     saveSongIndex = index;
 }
+
+//used to move the output display bubble above the slider
+function moveOutput(slider){
+	console.log('move Output');
+
+  var control = $(slider),
+    controlMin = control.attr('min'),
+    controlMax = control.attr('max'),
+    controlVal = control.val(),
+    controlThumbWidth = control.data('thumbwidth');
+
+  var range = controlMax - controlMin;
+  
+  var position = ((controlVal - controlMin) / range) * 100;
+  var positionOffset = Math.round(controlThumbWidth * position / 100) - (controlThumbWidth / 2);
+  var output = control.next('output');
+  
+  output
+    .css('left', 'calc(' + position + '% - ' + positionOffset + 'px)')
+    .text(controlVal);
+};

@@ -393,6 +393,17 @@ header.masthead p {
     display: inline-block;
 }
 
+/* unset bs3 setting */
+.modal-open {
+ overflow: auto; 
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 .slidecontainer {
     width: 100%;
 }
@@ -429,9 +440,37 @@ header.masthead p {
     cursor: pointer;
 }
 
-
-
-/* unset bs3 setting */
-.modal-open {
- overflow: auto; 
+.range-control {
+  position: relative;
 }
+
+input[type=range] {
+  display: block;
+  width: 100%;
+  margin: 0;
+  margin-bottom: 15px;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+
+output {
+  position: absolute;
+  top: -32px;
+  display: none;
+  width: 50px;
+  height: 24px;
+  border: 1px solid #e2e2e2;
+  background-color: #fff;
+  border-radius: 3px;
+  color: #777;
+  font-size: .8em;
+  line-height: 24px;
+  text-align: center;
+}
+
+input[type=range]:active + output {
+  display: block;
+  transform: translateX(-50%);
+}
+
