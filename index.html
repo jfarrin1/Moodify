@@ -2,6 +2,16 @@
 <html lang="en">
 
   <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116544953-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-116544953-1');
+	</script>
+ 
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -85,7 +95,7 @@
             <div class="step">2.</div><h4 class="stepHeader">View Your Top 10 Songs</h4>
               <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">Spotify creates a list of your "Top" songs, which we display to you. Moodify does not create this list itself, we just use Spotify's.</p>
             <div class="step">3.</div><h4 class="stepHeader">Select Moods</h4>
-              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">For each song, use the sliders to adjust the different mood levels. Once you've done this for all songs, click Submit.</p>
+              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">For each song, use the sliders to adjust the different mood levels to represent how the song makes you feel. Once you've done this for all songs, click Submit.</p>
             <div class="step">4.</div><h4 class="stepHeader">Get Recommended Songs (Comming Soon)</h4>
               <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">Once we have enough testing data we will be able to recommend songs catered to your tastes and mood.</p>
             <a class="btn btn-light btn-xl js-scroll-trigger" href="#page-top">Get Started!</a>
@@ -124,7 +134,7 @@
           <div class="col-lg-12 mr-auto text-center">
             <i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i>
             <p>
-              <a href="mailto:your-email@your-domain.com">MoodifyMusic@gmail.com</a>
+              <a href="mailto:MoodifyMusic@gmail.com">MoodifyMusic@gmail.com</a>
             </p>
           </div>
         </div>
@@ -132,7 +142,7 @@
     </section>
 
     <!--Mood Modal-->
-    <div class="modal fade" id="moodModal" role="dialog" style="max-width:1800px">
+    <div class="modal fade" id="moodModal" role="dialog" style="max-width:1800px; min-width: 400px">
         <div class="modal-dialog modal-lg">
 
             <!-- Modal content-->
@@ -156,7 +166,7 @@
     </div>
 
 	<!--Thank You Modal-->
-    <div class="modal fade" id="thanksModal" role="dialog" style="max-width:1800px">
+    <div class="modal fade" id="thanksModal" role="dialog" style="max-width:1800px; min-width: 400px;">
         <div class="modal-dialog modal-lg">
 
             <!-- Modal content-->
@@ -188,18 +198,11 @@
     <!-- Custom scripts for this template -->
     <script src="js/creative.min.js"></script>
 
+    <!--Database Scripts-->
+    <script src="js/backend.js"></script>
+    
     <!--Spotify Scripts-->
     <script src="js/login.js"></script>
-
-      <script>
-
-        function toggleDrop() {
-            console.log(this.innerHTML);
-            var x = this.parentNode.parentNode.parentNode.firstElementChild.id;
-            document.getElementById(x).innerHTML = this.innerHTML;
-
-        };
-      </script>
   </body>
 
 </html>

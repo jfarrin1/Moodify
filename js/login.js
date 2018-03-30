@@ -1,8 +1,9 @@
 //~Global Variables
 //array to hold song mood data
 var songData = {};
-var Moods = ['HAPPY', 'SAD', 'NOSTALGIC', 'RELAXED', 'ANGRY'];
+var Moods = ['HAPPY', 'SAD', 'NOSTALGIC', 'RELAXING', 'ENERGIZING'];
 var saveSongIndex = 0;
+var userID = '';
 
 (function () {
 
@@ -48,7 +49,7 @@ var saveSongIndex = 0;
             }
         });
     }
-    //get the user's top 10 tracks as given by spotify
+	//get the user's top 10 tracks as given by spotify
     function getUserTopTracks(accessToken) {
         return $.ajax({
             url: 'https://api.spotify.com/v1/me/top/tracks?limit=10',
@@ -58,9 +59,14 @@ var saveSongIndex = 0;
         });
     }
     //gets the first 10 tracks from a playlist (not used currently)
-    function getPlaylistTracks(accessToken, userID, playlistID) {
+    function getTrackFeatures(accessToken, trackIDs) {
+		ids = '';
+		for (var i=0; i < trackIDs.length-1; i++){
+			ids += trackIDs[i] + ',';
+		}
+		ids += trackIDs[trackIDs.length-1];
         return $.ajax({
-            url: 'https://api.spotify.com/v1/users/' + userID + '/playlists/' + playlistID + '/tracks?limit=10',
+            url: 'https://api.spotify.com/v1/audio-features/?ids=' + ids,
             headers: {
                 'Authorization': 'Bearer ' + accessToken
             }
@@ -70,31 +76,43 @@ var saveSongIndex = 0;
     function populateModal() {
         var tempHTML = '';
 		 for (var i = 0; i < Moods.length; i++) {
-            tempHTML += '<h5>' + Moods[i] + '</h5><form><div class="range-control"><input type="range" min="0" max="10" value="0" step="1" data-thumbwidth="20" oninput="moveOutput(this)" class="slider" id="modalMood' + Moods[i]+ '"><output name="rangeVal">0</output></div></form>'
+            tempHTML += '<h5>' + Moods[i] + '</h5><form><div class="range-control"><input type="range" min="-5" max="5" value="0" step="1" data-thumbwidth="20" oninput="moveOutput(this)" class="slider" id="modalMood' + Moods[i]+ '"><output name="rangeVal">0</output></div></form>'
 		 };
-		 
 		
         $("#modalMoods").html(tempHTML);
     }
 	
+	//create a song object to store in songData
+	function createSongObject(id, song, album, artist) {
+		var tempObject = {
+			'song': song,
+			'album': album,
+			'artist': artist,
+			'id' : id
+		}
+		return tempObject;
+	}
+
     var loginButton = document.getElementById('btn-login');
     var headRow = document.getElementById('headerRow');
 
     loginButton.addEventListener('click', function () {
         login(function (accessToken) {
-            userID = '';
             getUserData(accessToken)
                 .then(function(response) {
                     loginButton.style.display = 'none';
                     //console.log(response);
                     userID = response.id;
+					insertUser(userID);
                 });
             getUserTopTracks(accessToken)
                 .then(function (response) {
                     headRow.style.display = 'none';
                     //console.log(response);
-                    var innerHTML = '<h2 style="margin-top:50px;">Your Top 10 Songs</h2><table class="table table-hover"><thead><tr><th scope="col">#</th><th scope="col">Song</th><th scope="col">Album</th><th scope="col">Artist</th><th scope="col">Mood</th></tr></thead><tbody>';
+					var trackIDs = []
+                    var innerHTML = '<h2 style="margin-top:50px;">Your Top Songs</h2><table class="table table-hover"><thead><tr><th scope="col">#</th><th scope="col">Song</th><th scope="col">Album</th><th scope="col">Artist</th><th scope="col">Mood</th></tr></thead><tbody>';
                     for (i = 0; i < response.items.length; i++) {
+						trackIDs.push(response.items[i].id);
                         album = response.items[i].album.name;
                         song = response.items[i].name;
                         uri = response.items[i].uri;
@@ -105,30 +123,28 @@ var saveSongIndex = 0;
                             artist += ', ';
                         }
                         artist += response.items[i].artists[response.items[i].artists.length - 1].name;
-                        innerHTML += '<tr><th scope="row">' + i + '</th><td>' + song + '</td><td>' + album + '</td><td>' + artist + '</td><td><button class="btn btn-secondary" type="button" onclick="openMoodModal(\'' + i + '\',\'' + song + '\',\'' + artist + '\',\'' + uri + '\')">Select Mood</button></td></tr>';
-                    }
-                    innerHTML += '</tbody></table><a class="btn btn-xl btn-primary" style="float:right; margin-bottom: 20px" onclick="updateSongData();">Submit</a>';
+                        innerHTML += '<tr><th scope="row">' + i + '</th><td>' + song + '</td><td>' + album + '</td><td>' + artist + '</td><td><button class="btn btn-secondary moodButton" type="button" onclick="openMoodModal(\'' + i + '\')">Select Mood</button></td></tr>';
+						//add song to song array(dictionary)
+						songData[i] = createSongObject(response.items[i].id, song, album, artist);
+					}
+                    innerHTML += '</tbody></table><a class="btn btn-xl btn-primary" style="float:right; margin-bottom: 20px" onclick="submitSongData();">Submit</a>';
                     $('#trackTable').html(innerHTML);
-
+					//add sliders to mood modal
+					populateModal();
+					//get audio-features for song and add to songData
+					getTrackFeatures(accessToken, trackIDs)
+						.then(function(response) {
+								//console.log(response);
+								for (var i=0; i < response.audio_features.length; i++){
+									songData[i].audio_features = response.audio_features[i];
+									//console.log(response.audio_features[i]);
+								}
+						});
+					
                 });
-            populateModal();
         });
     });
 })();
-
-//create a song object to store in songData
-function createSongObject(song, album, artist) {
-    var tempObject = {
-        'song': song,
-        'album': album,
-        'artist': artist,
-        'moods': {}
-    }
-    for (var i = 0; i < Moods.length; i++) {
-        tempObject.moods[Moods[i]] = 0;
-    }
-    return tempObject;
-}
 
 function saveSongMoods() {
     //loop over moods in model and update their songData values
@@ -136,32 +152,47 @@ function saveSongMoods() {
     for (var i = 0; i < sliders.length; i += 1) {
         key = sliders[i].id.substring(9);
         songData[saveSongIndex].moods[key] = sliders[i].value;
-		
     }
+	var moodButtons = $(".moodButton");
+	moodButtons[saveSongIndex].className = 'btn btn-primary moodButton';
 }
 
-function openMoodModal(index, song, artist, uri) {
+function openMoodModal(index) {
 	//since we use the same modal for all songs, we have to change out the data for each song
+	var song = songData[index].song;
+	var artist = songData[index].artist;
+	var uri = songData[index].audio_features.uri;
     $("#modalSong").text(song);
     $("#modalArtist").text('by ' + artist);
     $("#modalPlayer").attr('src', 'https://open.spotify.com/embed?uri=' + uri);
-    if (!(index in songData)) {
-        //create song data objects
-        var songObject = createSongObject(song, album, artist);
-        songData[index] = songObject;
+    if (!('moods' in songData[index])) {
+        //create mood attribute and set all to default 0
+		songData[index].moods = {};
+		for (var i = 0; i < Moods.length; i++) {
+			songData[index].moods[Moods[i]] = 0;
+		}
     }
 	var sliders = $(".slider");
     for (var i = 0; i < sliders.length; i += 1) {
 		//set sliders to proper position for this song
         key = sliders[i].id.substring(9);
         sliders[i].value = songData[index].moods[key];
+		moveOutput(sliders[i]);
     }
     $("#moodModal").modal('toggle');
     saveSongIndex = index;
-}
+} 
 
-function updateSongData(){
+function submitSongData(){
 	$("#thanksModal").modal('toggle');
+	// console.log(songData);
+	var songs = [];
+	for(var i in songData){
+		if ('moods' in songData[i]){
+			songs.push(songData[i]);
+		}
+	}
+	insertSongs(songs, userID);
 };
 
 //used to move the output display bubble above the slider
