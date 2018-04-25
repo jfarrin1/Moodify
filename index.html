@@ -80,7 +80,13 @@
             <div class="col-lg-10 mx-auto">
                 <div id="trackTable"></div>
             </div>
-      </div> 
+		</div>
+		<div id="loader" style="align-items: center; border: 4px solid #fae62d; display: none; height: 10rem; margin: auto; width: 10rem;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="72%" height="55%" viewBox="5 0 80 60" style="margin: auto; overflow: hidden;">
+				<path id="wave" fill="none" stroke="#1ed760" stroke-width="4" stroke-linecap="round"></path>
+			</svg>
+		</div>
+	  </div>
     </header>
 
 
@@ -92,12 +98,12 @@
             <hr class="light my-4">			
             <div class="step">1.</div><h4 class="stepHeader">Log into Spotify</h4>
                 <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">We use Spotify's secure API to connect your account with Moodify. Moodify requests permission to access only your "Top" songs. Read about our privacy policy below.</p>
-            <div class="step">2.</div><h4 class="stepHeader">View Your Top 10 Songs</h4>
+            <div class="step">2.</div><h4 class="stepHeader">View Your Top Songs</h4>
               <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">Spotify creates a list of your "Top" songs, which we display to you. Moodify does not create this list itself, we just use Spotify's.</p>
             <div class="step">3.</div><h4 class="stepHeader">Select Moods</h4>
-              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">For each song, use the sliders to adjust the different mood levels to represent how the song makes you feel. Once you've done this for all songs, click Submit.</p>
-            <div class="step">4.</div><h4 class="stepHeader">Get Recommended Songs (Comming Soon)</h4>
-              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">Once we have enough testing data we will be able to recommend songs catered to your tastes and mood.</p>
+              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">For each song, use the sliders to adjust the different mood levels to represent how the song makes you feel. Once you've done this for all songs, click GET RECOMMENDATIONS.</p>
+            <div class="step">4.</div><h4 class="stepHeader">Get Recommended Songs</h4>
+              <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">Adjust the sliders to represent the type of song you currently wish to hear. Click SUBMIT and we'll create a small playlist of songs catered to your tastes and mood. Listen to the songs and let us know if you enjoyed our selections.</p>
             <a class="btn btn-light btn-xl js-scroll-trigger" href="#page-top">Get Started!</a>
           </div>
         </div>
@@ -142,7 +148,7 @@
     </section>
 
     <!--Mood Modal-->
-    <div class="modal fade" id="moodModal" role="dialog" style="max-width:1800px; min-width: 400px">
+    <div class="modal fade" id="moodModal" role="dialog" style="max-width:1800px; min-width: 540px">
         <div class="modal-dialog modal-lg">
 
             <!-- Modal content-->
@@ -154,37 +160,45 @@
                 </div>
                 <div class="modal-body">
                     <iframe id ="modalPlayer"src="" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                    <div id="modalMoods">
-                    </div>
+                    <div id="modalFeedback"></div>
+					<h5 style="display: none" id="feedbackHeader">Sorry we got this one wrong, what mood does it evoke for you?</h5>
+					<div id="modalMoods"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="saveSongMoods()">Save</button>
+					<select class="btn btn-secondary" style="max-width:18rem; display: none" id="playlistDropDown">
+						<option selected>ADD TRACK TO PLAYLIST...</option>
+					</select>
+					<button type="button" class="btn btn-secondary" id="moodModalSubmit" data-dismiss="modal" onclick="saveSongMoods()">Save</button>
                 </div>
             </div>
 
         </div>
     </div>
 
-	<!--Thank You Modal-->
-    <div class="modal fade" id="thanksModal" role="dialog" style="max-width:1800px; min-width: 400px;">
+	<!--User Mood Modal-->
+    <div class="modal fade" id="userMoodModal" role="dialog" style="max-width:1800px; min-width: 500px;">
         <div class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 id="modalSong">Thank you!</h2>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 style="font-weight: 600; font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;">Get Song Recommendations</h2>
+					<p style="display:block;">Adjust the sliders to your CURRENT MOOD and we'll make a playlist catered to your tastes and mood.</p>
                 </div>
                 <div class="modal-body">
-                    <h5>Come back soon for Moodify song recommendations</h5>
-                </div>
+					<h4 style="font-weight: 600; font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;">CURRENT MOOD</h4>
+					<div id="userMoods">
+						
+					</div>
+				</div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" onclick="getSongRecommendations();"data-dismiss="modal">SUBMIT</button>
                 </div>
             </div>
 
         </div>
     </div>
-	
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -203,6 +217,10 @@
     
     <!--Spotify Scripts-->
     <script src="js/login.js"></script>
+	
+	<!--Animation Scripts-->
+    <script src="js/loading.js"></script>
+	
   </body>
 
 </html>

@@ -1,8 +1,8 @@
 body,
 html {
-  width: 100%;
+  width: 100%; 
   height: 100%;
-  min-width:514px; /*enough to fit the Top Songs Table*/
+  min-width:550px; /*enough to fit the Top Songs Table*/
   /*overflow: hidden;*/
 }
 
@@ -365,14 +365,14 @@ header.masthead p {
     border-radius: 50%;
     behavior: url(PIE.htc);
     /* remove if you don't care about IE8 */
-    width: 70px;
-    height: 70px;
+    width: 4rem;
+    height: 4rem;
     padding: 8px;
     text-align: center;
     font-weight: 700;
     text-transform: uppercase;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 36px;
+    font-size: 2rem;
     display: inline-block;
     float: left;
 }
@@ -385,6 +385,7 @@ header.masthead p {
     float: left;
     margin-left: 15px;
     margin-top:20px;
+	font-size:1.4rem;
 }
 
 #modalSong {
@@ -475,3 +476,18 @@ input[type=range]:active + output {
   transform: translateX(-50%);
 }
 
+#wave {
+  stroke-dasharray: 0 16 101 16;
+  animation: moveTheWave 2400ms linear infinite;
+}
+
+@keyframes moveTheWave {
+  0% { 
+    stroke-dashoffset: 0; 
+    transform: translate3d(0, 0, 0);
+  }
+  100% { 
+    stroke-dashoffset: -133;
+    transform: translate3d(-90px, 0, 0);
+  }
+}
