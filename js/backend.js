@@ -1,11 +1,14 @@
-function updatePerformance(liked, matched){
+function updatePerformance(liked, matched, song_id, user_id, playlist){
 	 $.ajax({
 			url: 'http://dsg1.crc.nd.edu:5000/performance',
 			type: 'POST',
 			dataType: "json",
 			data: {
 					liked: liked,
-					matched: matched
+					matched: matched,
+					song_id: song_id,
+					user_id: user_id,
+					playlist: playlist
 			},
 			success: function(response){
 					//console.log(response);

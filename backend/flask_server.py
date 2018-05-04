@@ -59,7 +59,7 @@ def recommend():
 			moods_train = np.vstack((moods_train, list(row)))
 	#print(moods_train)
 
-	nn = MLPRegressor(hidden_layer_sizes=(100,),  activation='relu', solver='adam', alpha=0.001, batch_size='auto', learning_rate='constant', learning_rate_init=0.01, power_t=0.5, max_iter=1000, shuffle=True, random_state=0, tol=0.0001, verbose=False, warm_start=False, momentum=0.9, nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9, beta_2=0.999, epsilon=1e-08) 
+	nn = MLPRegressor(hidden_layer_sizes=(100, 50),  activation='relu', solver='adam', alpha=0.001, batch_size='auto', learning_rate='constant', learning_rate_init=0.01, power_t=0.5, max_iter=1000, shuffle=True, random_state=0, tol=0.0001, verbose=False, warm_start=False, momentum=0.9, nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9, beta_2=0.999, epsilon=1e-08) 
 
 	n = nn.fit(moods_train, acoustics_train)
 
@@ -97,7 +97,11 @@ def recommend():
 def performance():
 	liked = int(request.form['liked'])
 	matched = int(request.form['matched'])
+	user_id = request.form['user_id']
+	song_id = request.form['song_id']
+	playlist = request.form['playlist']
 	#print(liked, matched)
+	cur.execute("INSERT INTO results VALUES (%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE liked = %s, matched = %s, playlist = %s;", (user_id, song_id, liked, matched, playlist, liked, matched, playlist))
 	cur.execute("UPDATE performance SET liked = liked + %s;", (liked,))
 	cur.execute("UPDATE performance SET matched = matched + %s;", (matched,))
 	cur.execute("UPDATE performance SET total = total + 1;")

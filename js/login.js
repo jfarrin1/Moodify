@@ -235,7 +235,7 @@ function getSongRecommendations() {
 			var count = 0;
 			features = '';
 			response = JSON.parse(response);
-			// console.log(response);
+			console.log(response);
 			for(i in response){
 				if (count < Object.keys(response).length-1){
 					features += 'target_' + i + '=' + response[i] + '&';
@@ -244,7 +244,6 @@ function getSongRecommendations() {
 				}
 				count++;
 			}
-			//console.log(features);
 			feature_targets = features;
 			//console.log(seed_artists);
 			$.ajax({
@@ -471,13 +470,15 @@ function submitRecommendedSong(){
 		alert('Please select a response to both questions (or click the \'x\' in the top-right to exit without saving)');
 		return
 	} else {
+		var saved = 0;
 		$("#moodModal").modal('toggle');
-		updatePerformance(liked, matched);
+		if(playlist != 'ADD TRACK TO PLAYLIST...'){
+			saved = 1;
+			addTrackToPlaylist(playlist);
+		}
+		updatePerformance(liked, matched, songData[saveSongIndex].id, userID, saved);
 		saveSongMoods();
 		var songs = [songData[saveSongIndex]];
 		insertSongs(songs, userID);
-	}
-	if(playlist != 'ADD TRACK TO PLAYLIST...'){
-		addTrackToPlaylist(playlist);
 	}
 }

@@ -47,11 +47,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#about">How It Works</a>
+		  	<li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#HIW">How It Works</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#portfolio">Privacy</a>
+              <a class="nav-link js-scroll-trigger" href="#guide">User Guide</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#privacy">Privacy</a>
             </li>
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
@@ -89,12 +92,28 @@
 	  </div>
     </header>
 
-
-    <section class="content-section bg-primary" id="about">
+	<section class="content-section bg-primary" id="HIW">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto text-center">
-            <h2 class="section-heading text-white">How it Works</h2>
+            <h2 class="section-heading text-white">How It Works</h2>
+            <hr class="light my-4">
+                <p class="text-faded mb-4" style="display: inline-block;">
+					Music has the ability to evoke strong emotions in people. Certain songs make us nostalgic by bringing back memories from the past, others pump us up before a big workout, and some help us chill out after a stressful day. Moodify seeks to investigate the relationship between the audio features of a song and the emotions the song evokes in people. By building these relationships we will be able to suggest the optimal track for the user to listen to based on their current mood. 
+					</br></br>
+					Through Spotify's APIs we are able to gather data on songs' audio features (pitch, tempo, etc.). Our users then assign moods to their top songs. This gives us a set of training data matching audio features of a given song to an assigned mood. We use this training data to build a Multilayer Perceptron Regression model (a neural network). To recommend songs, we simply pass a user's current mood into the model and it returns the audio features that match that mood. We then find songs that fit the user's musical preferences and that match the desired audio features for their current mood.
+				</p>
+            <a class="btn btn-light btn-xl js-scroll-trigger" href="#page-top">Get Started!</a>
+          </div>
+        </div>
+      </div>
+    </section>
+	
+    <section class="content-section bg-secondary" id="guide" style="background-color: #c074b2!important;">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading text-white">User Guide</h2>
             <hr class="light my-4">			
             <div class="step">1.</div><h4 class="stepHeader">Log into Spotify</h4>
                 <p class="text-faded mb-4" style="display: inline-block; margin-left:85px; text-align:left;">We use Spotify's secure API to connect your account with Moodify. Moodify requests permission to access only your "Top" songs. Read about our privacy policy below.</p>
@@ -110,7 +129,7 @@
       </div>
     </section>
 
-    <section class="content-section bg-secondary" id="portfolio" style="background-color: #c074b2!important;">
+    <section class="content-section bg-primary" id="privacy">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto text-center">
